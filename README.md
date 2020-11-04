@@ -27,7 +27,7 @@ stats - gets an overview of all included stats.
 ![areas command](/assets/areas_command.png?raw=true)
 
 *Setarea Command:*  
-![setarea command](/assets/areas_command.png?raw=true)
+![setarea command](/assets/setarea_command.png?raw=true)
 
 *Daily Command:*  
 ![daily command](/assets/daily_command.png?raw=true)
