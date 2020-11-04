@@ -1,7 +1,7 @@
 [UK Government Coronavirus API]: https://coronavirus.data.gov.uk/developers-guide
 
 # Discord Covid-19 Tracker
-<img src="assets/Logo.png"  width="50" height="50"> 
+<img src="https://github.com/JacobA2000/covid19-tracker-discord/blob/main/assets/Logo.png?raw=true"  width="50" height="50"> 
 
 A discord bot to track covid stats in the uk via the [UK Government Coronavirus API]
 
@@ -24,16 +24,16 @@ stats - gets an overview of all included stats.
 
 **EXAMPLES OF EXPECTED OUTPUT:**  
 *Areas Command:*  
-![areas command](/assets/areas_command.png?raw=true)
+![areas command](https://github.com/JacobA2000/covid19-tracker-discord/blob/main/assets/areas_command.png?raw=true)
 
 *Setarea Command:*  
-![setarea command](/assets/setarea_command.png?raw=true)
+![setarea command](https://github.com/JacobA2000/covid19-tracker-discord/blob/main/assets/setarea_command.png?raw=true)
 
 *Daily Command:*  
-![daily command](/assets/daily_command.png?raw=true)
+![daily command](https://github.com/JacobA2000/covid19-tracker-discord/blob/main/assets/daily_command.png?raw=true)
 
 *Weekly Command:*  
-![weekly command](/assets/weekly_command.png?raw=true)
+![weekly command](https://github.com/JacobA2000/covid19-tracker-discord/blob/main/assets/weekly_command.png?raw=true)
 
 *Stats Command:*  
-![stats command](/assets/stats_command.png?raw=true)
+![stats command](https://github.com/JacobA2000/covid19-tracker-discord/blob/main/assets/stats_command.png?raw=true)
