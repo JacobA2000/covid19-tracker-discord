@@ -7,7 +7,7 @@ import json
 import discord
 from discord.ext import commands
 
-#Returns a list of all areas in lower case
+# Returns a list of all areas in lower case
 def get_areas_array(data):
     areas = [""] * len(data["data"])
 
@@ -16,14 +16,16 @@ def get_areas_array(data):
 
     return areas
 
-#Check if config file exists, if not create one.
+
+# Check if config file exists, if not create one.
 if os.path.exists("./config.json") == False:
-    configJsonTemplate = {"token":"token", "prefix":"&covid", "areaType":"", "area":""}
+    configJsonTemplate = {"token": "token",
+                          "prefix": "&covid", "areaType": "", "area": ""}
 
     with open("./config.json", "w+") as f:
         json.dump(configJsonTemplate, f)
 
-#Get data from config file
+# Get data from config file
 with open('./config.json') as f:
     configData = json.load(f)
 
@@ -32,9 +34,9 @@ prefix = configData["prefix"]
 areaType = configData["areaType"]
 area = configData["area"]
 
-bot = commands.Bot(command_prefix= f"{prefix} ")
+bot = commands.Bot(command_prefix=f"{prefix} ")
 
-#Get all area data from API
+# Get all area data from API
 nationAreaData = CovidData.get_data(CovidData.generate_url("nation", "", True))
 nationAreas = get_areas_array(nationAreaData)
 regionAreaData = CovidData.get_data(CovidData.generate_url("region", "", True))
@@ -44,8 +46,8 @@ utlaAreas = get_areas_array(utlaAreaData)
 ltlaAreaData = CovidData.get_data(CovidData.generate_url("ltla", "", True))
 ltlaAreas = get_areas_array(ltlaAreaData)
 
-#Returns a list of all possible area for the specifed area type
-@bot.command(description="Returns a list of all possible area for the specifed area type.")
+# Returns a list of all possible area for the specifed area type
+@bot.command(description="Returns a list of all possible areas for the specifed area type.")
 async def areas(ctx, areaType):
     areaData = {}
     areaString = ""
@@ -61,7 +63,7 @@ async def areas(ctx, areaType):
         areaData = ltlaAreaData
 
     for i in range(len(areaData["data"])):
-        #Discord only accepts embed fields of 1024 length so this gets around that by creating multiple fields
+        # Discord only accepts embed fields of 1024 length so this gets around that by creating multiple fields
         if len(areaString + (areaData['data'][i]['area'] + "\n")) > 1024:
             areaStrings.append(areaString)
             areaString = areaData["data"][i]["area"] + "\n"
@@ -70,45 +72,51 @@ async def areas(ctx, areaType):
 
     areaStrings.append(areaString)
 
-    embed=discord.Embed(title=f"{areaType.upper()} - AREAS", description="These are all the areas available for that area type.", color=0x000000)
-    
+    embed = discord.Embed(title=f"{areaType.upper()} - AREAS", description="These are all the areas available for that area type.", color=0x000000)
+
     for string in areaStrings:
         embed.add_field(name="\u200b", value=string, inline=True)
 
     await ctx.send(embed=embed)
 
-#Sets the area type and area for the bot to use. 
+# Sets the area type and area for the bot to use.
 @bot.command(description="Sets the area type and area for the bot to use.")
-async def setarea(ctx, areaType, *, area):
+async def setarea(ctx, iareaType, *, iarea):
     areaTypes = ["nation", "region", "utla", "ltla"]
 
-    areaType = areaType.lower()
-    area = area.lower()
+    iareaType = iareaType.lower()
+    iarea = iarea.lower()
 
-    #Checks validity of areaType an area
-    if areaType in areaTypes:
-        areaValid = False
-        if areaType == "nation":
-            if area in nationAreas:
+    # Checks validity of areaType an area
+    if iareaType in areaTypes:
+        iareaValid = False
+        if iareaType == "nation":
+            if iarea in nationAreas:
                 print("Valid Nation Area")
-                areaValid = True
-        elif areaType == "region":
-            if area in regionAreas:
+                iareaValid = True
+        elif iareaType == "region":
+            if iarea in regionAreas:
                 print("Valid Region Area")
-                areaValid = True
-        elif areaType == "utla":
-            if area in utlaAreas:
+                iareaValid = True
+        elif iareaType == "utla":
+            if iarea in utlaAreas:
                 print("Valid UTLA Area")
-                areaValid = True
-        elif areaType == "ltla":
-            if area in ltlaAreas:
+                iareaValid = True
+        elif iareaType == "ltla":
+            if iarea in ltlaAreas:
                 print("Valid LTLA Area")
-                areaValid = True
+                iareaValid = True
         else:
-            areaValid = False
+            iareaValid = False
 
-    if areaValid:
-        #Update the values of areaType and area in the config file
+    if iareaValid:
+        # Update the area and areaType
+        global area
+        area = iarea
+        global areaType
+        areaType = iareaType
+
+        # Update the values of areaType and area in the config file
         with open("./config.json", "r+") as f:
             data = json.load(f)
             data["areaType"] = areaType
@@ -120,5 +128,51 @@ async def setarea(ctx, areaType, *, area):
         await ctx.send(f"Set area type to {areaType} and area to {area}.")
     else:
         await ctx.send("Invalid Area.")
+
+# Gets daily stats
+@bot.command(description="Gets daily stats")
+async def daily(ctx):
+    dailyData = CovidData.get_data(CovidData.generate_url(areaType, area, "", True))
+
+    await ctx.send(f"""```
+    {area.upper()} - COVID STATS
+
+    DAILY:
+    - Data Date: {dailyData["data"][0]['date']}
+    - New Cases: {dailyData["data"][0]['newCases']}```""")
+
+# Gets weekly stats
+@bot.command(description="Gets weekly stats")
+async def weekly(ctx):
+    sevenDayData = CovidData.get_data(CovidData.generate_url(areaType, area, "", "", True))
+
+    await ctx.send(f"""```
+    {area.upper()} - COVID STATS
+
+    PAST 7 DAYS:
+    - Data Date: {sevenDayData["data"][0]['date']}
+    - Cases: {sevenDayData["data"][0]['newCases']}
+    - Rate: {sevenDayData["data"][0]['rate']}```""")
+
+# Gets all stats
+@bot.command(description="Gets all stats")
+async def stats(ctx):
+    dailyData = CovidData.get_data(CovidData.generate_url(areaType, area, "", True))
+    sevenDayData = CovidData.get_data(CovidData.generate_url(areaType, area, "", "", True))
+
+    await ctx.send(f"""```
+    {area.upper()} - COVID STATS
     
+    OVERVIEW:
+    - Total Cases: {dailyData["data"][0]['totalCases']}
+    - Daily Data Date: {dailyData["data"][0]['date']}
+    - Weekly Data Date: {sevenDayData["data"][0]['date']}
+
+    DAILY:
+    - New Cases: {dailyData["data"][0]['newCases']}
+
+    PAST 7 DAYS:
+    - Cases: {sevenDayData["data"][0]['newCases']}
+    - Rate: {sevenDayData["data"][0]['rate']}```""")
+
 bot.run(token)

@@ -1,3 +1,4 @@
+#REFER TO https://coronavirus.data.gov.uk/developers-guide FOR DETAILS ON THE API
 from requests import get
 
 class colors:
@@ -36,46 +37,7 @@ def generate_url(areaType, area, getAreas=False, daily=False, sevenDay=False):
             'https://api.coronavirus.data.gov.uk/v1/data?'
             f'filters=areaType={areaType};areaName={area}&'
             'latestBy=newCasesBySpecimenDateRollingRate&'
-            'structure={"newCases":"newCasesBySpecimenDateRollingSum","rate":"newCasesBySpecimenDateRollingRate"}'
+            'structure={"date":"date","newCases":"newCasesBySpecimenDateRollingSum","rate":"newCasesBySpecimenDateRollingRate"}'
         )
     
     return url
-    
-
-    
-
-if __name__ == '__main__':
-    #REFER TO https://coronavirus.data.gov.uk/developers-guide FOR DETAILS ON THE API
-    AREA = "Bristol, city of"
-    AREA_TYPE = "utla"
-    
-    dailyURL = (
-        'https://api.coronavirus.data.gov.uk/v1/data?'
-        f'filters=areaType={AREA_TYPE};areaName={AREA}&'
-        'latestBy=date&'
-        'structure={"date":"date","newCases":"newCasesByPublishDate","totalCases":"cumCasesByPublishDate", "rate":"newCasesBySpecimenDateRollingRate"}'
-    )
-
-    sevenDayURL = (
-        'https://api.coronavirus.data.gov.uk/v1/data?'
-        f'filters=areaType={AREA_TYPE};areaName={AREA}&'
-        'latestBy=newCasesBySpecimenDateRollingRate&'
-        'structure={"newCases":"newCasesBySpecimenDateRollingSum","rate":"newCasesBySpecimenDateRollingRate"}'
-    )
-    
-    dailyData = get_data(dailyURL)
-    sevenDayData = get_data(sevenDayURL)
-
-    print(f"""
-    {colors.GREEN}{AREA.upper()} - COVID STATS{colors.ENDC}
-
-    {colors.YELLOW}Total Cases: {dailyData["data"][0]['totalCases']}{colors.ENDC}
-
-    {colors.CYAN}DAILY:{colors.ENDC}
-    {colors.YELLOW}Data Date: {dailyData["data"][0]['date']}
-    New Cases: {dailyData["data"][0]['newCases']}{colors.ENDC}
-
-    {colors.CYAN}PAST 7 DAYS:{colors.ENDC}
-    {colors.YELLOW}Cases: {sevenDayData["data"][0]['newCases']}
-    Rate: {sevenDayData["data"][0]['rate']}{colors.ENDC}
-    """)
