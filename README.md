@@ -1,7 +1,7 @@
 [UK Government Coronavirus API]: https://coronavirus.data.gov.uk/developers-guide
 
 # Discord Covid-19 Tracker
-<img src="assets/logo.png"  width="50" height="50"> 
+<img src="assets/Logo.png"  width="50" height="50"> 
 
 A discord bot to track covid stats in the uk via the [UK Government Coronavirus API]
 
