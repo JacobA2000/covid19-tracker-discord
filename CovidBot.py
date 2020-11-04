@@ -19,8 +19,7 @@ def get_areas_array(data):
 
 # Check if config file exists, if not create one.
 if os.path.exists("./config.json") == False:
-    configJsonTemplate = {"token": "token",
-                          "prefix": "&covid", "areaType": "", "area": ""}
+    configJsonTemplate = {"token": "token", "prefix": "&covid", "areaType": "", "area": ""}
 
     with open("./config.json", "w+") as f:
         json.dump(configJsonTemplate, f)
