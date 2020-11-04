@@ -14,13 +14,11 @@ On the first run the bot will not boot, and instead a config.json file is create
 
 **COMMANDS**  
 *(To initiate a command type the prefix followed by the command and any parameters.)*
-```
-areas <areaType> - gets a list of valid areas for the specified area.
-setarea <areaType> <area> - sets the areaType and area and updates the config file.
-daily - gets the latest stats from the api.
-weekly - gets the latest cumulative stats from the api.
-stats - gets an overview of all included stats.
-```
+* areas <areaType> - gets a list of valid areas for the specified area.
+* setarea <areaType> <area> - sets the areaType and area and updates the config file.
+* daily - gets the latest stats from the api.
+* weekly - gets the latest cumulative stats from the api.
+* stats - gets an overview of all included stats.
 
 **EXAMPLES OF EXPECTED OUTPUT:**  
 *Areas Command:*  
